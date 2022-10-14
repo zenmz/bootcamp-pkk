@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\SiswaController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,7 +19,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('siswa', SiswaController::class);
+Route::resource('siswa', SiswaController::class)->middleware('admin');
+
+Route::get('deletesiswa/{id}', [SiswaController::class, 'destroy'])->name('deletesiswa');
 
 // Route::get('dashboard', [SiswaController::class, 'index']);
 
@@ -52,3 +55,7 @@ Route::resource('siswa', SiswaController::class);
 // });
 
 
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

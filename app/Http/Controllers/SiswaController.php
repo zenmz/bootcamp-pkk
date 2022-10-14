@@ -85,7 +85,7 @@ class SiswaController extends Controller
      */
     public function show($id)
     {
-        //
+        echo "ini fungsi show $id";
     }
 
     /**
@@ -96,7 +96,13 @@ class SiswaController extends Controller
      */
     public function edit($id)
     {
-        //
+        // $data = DB::select('select * from siswa where active = ?', $id);
+        // $data = DB::table('siswa')->where('id', '=', $id);
+        // $data = Siswa::where('id', '=', '$id');
+        $data = Siswa::findOrFail($id);
+        $sekolah = Sekolah::all();
+
+        return view('siswa.edit', compact('data', 'sekolah'));
     }
 
     /**
@@ -108,7 +114,21 @@ class SiswaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // DB::update('update users set votes = 100 where name = ?', ['John']);
+
+        $data = Siswa::findOrFail($id);
+        // $data->update($request->all());
+
+        $validator = $request->validate([
+            'nis'=> 'required|integer',
+            'nama' => 'required|string', 
+            'alamat' => 'required|string',
+            'sekolah_id' => 'required' 
+        ]);
+
+        $data->update($validator);
+
+        return redirect('siswa')->with('success', 'Data Berhasil Diubah');
     }
 
     /**
@@ -119,11 +139,9 @@ class SiswaController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $data = Siswa::findOrFail($id);
+        $data->delete();
+        return redirect('siswa')->with('success', 'Data Berhasil Dihapus');
     }
 
-    public function j()
-    {
-        # code...
-    }
 }
