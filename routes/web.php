@@ -19,9 +19,16 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('siswa', SiswaController::class)->middleware('admin');
+Route::get('sekolah', function () {
+    return 'Halaman untuk sekolah';
+});
 
-Route::get('deletesiswa/{id}', [SiswaController::class, 'destroy'])->name('deletesiswa');
+
+
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::resource('siswa', SiswaController::class);
+    Route::get('deletesiswa/{id}', [SiswaController::class, 'destroy'])->name('deletesiswa');
+});
 
 // Route::get('dashboard', [SiswaController::class, 'index']);
 
@@ -29,9 +36,9 @@ Route::get('deletesiswa/{id}', [SiswaController::class, 'destroy'])->name('delet
 //     return view('template');
 // });
 
-// Route::get('dashboard', function () {
-//     return view('dashboard');
-// });
+Route::get('dashboard', function () {
+    return view('dashboard');
+});
 
 // Route::get('table', function () {
 //     $data = [

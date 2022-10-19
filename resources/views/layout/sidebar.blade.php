@@ -12,8 +12,8 @@
     <hr class="sidebar-divider my-0">
 
     <!-- Nav Item - Dashboard -->
-    <li class="nav-item active">
-        <a class="nav-link" href="index.html">
+    <li class="nav-item @if(Request::is('dashboard')) active @endif">
+        <a class="nav-link" href="{{ url('dashboard') }}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
     </li>
@@ -27,20 +27,39 @@
     </div>
 
     <!-- Nav Item - Pages Collapse Menu -->
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+    @if (Auth::user()->role == 'admin')
+    <li class="nav-item {{ Request::is('sekolah*') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ url('sekolah') }}">
             {{-- <i class="fas fa-fw fa-cog"></i> --}}
             <i class="fa fa-university" aria-hidden="true"></i>
             <span>Sekolah</span>
         </a>
     </li>
 
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+    <li class="nav-item @if(Request::is('siswa*')) active @endif">
+        <a class="nav-link" href="{{ url('siswa') }}">
             <i class="fa fa-user" aria-hidden="true"></i>
             <span>Siswa</span>
         </a>
     </li>
+    @elseif(Auth::user()->role == 'user')
+    <li class="nav-item">
+        <a class="nav-link" href="#">
+            <i class="fa fa-user" aria-hidden="true"></i>
+            <span>Riwayat Pembelian</span>
+        </a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link" href="#">
+            <i class="fa fa-user" aria-hidden="true"></i>
+            <span>Profil</span>
+        </a>
+    </li>
+    @endif
+
+
+
 
 
 

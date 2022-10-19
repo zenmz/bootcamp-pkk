@@ -21,6 +21,7 @@ class SiswaController extends Controller
         // $data = Siswa::select('siswa.id','siswa.nis', 'siswa.nama', 'siswa.alamat', 'sekolah.namasekolah')->join('sekolah', 'siswa.sekolah_id', '=', 'sekolah.id')->get();
 
         $data = Siswa::all();
+        // $data = Siswa::paginate(10);
         // echo $data->sekolah->namasekolah;
         // dd($data->sekolah()->namasekolah);
         return view('siswa.tampil', compact('data'));
@@ -66,10 +67,10 @@ class SiswaController extends Controller
         // ]);
 
         $validator = $request->validate([
-            'nis'=> 'required|integer',
-            'nama' => 'required|string', 
+            'nis' => 'required|integer',
+            'nama' => 'required|string',
             'alamat' => 'required|string',
-            'sekolah_id' => 'required' 
+            'sekolah_id' => 'required'
         ]);
 
         Siswa::create($validator);
@@ -120,10 +121,10 @@ class SiswaController extends Controller
         // $data->update($request->all());
 
         $validator = $request->validate([
-            'nis'=> 'required|integer',
-            'nama' => 'required|string', 
+            'nis' => 'required|integer',
+            'nama' => 'required|string',
             'alamat' => 'required|string',
-            'sekolah_id' => 'required' 
+            'sekolah_id' => 'required'
         ]);
 
         $data->update($validator);
@@ -143,5 +144,4 @@ class SiswaController extends Controller
         $data->delete();
         return redirect('siswa')->with('success', 'Data Berhasil Dihapus');
     }
-
 }
