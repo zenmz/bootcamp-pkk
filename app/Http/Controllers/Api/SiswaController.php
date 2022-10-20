@@ -144,5 +144,6 @@ class SiswaController extends Controller
         ];
 
         return response($respon, 200);
+        return json_encode($data);
     }
 }

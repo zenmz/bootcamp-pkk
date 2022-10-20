@@ -28,6 +28,7 @@ Route::get('sekolah', function () {
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::resource('siswa', SiswaController::class);
     Route::get('deletesiswa/{id}', [SiswaController::class, 'destroy'])->name('deletesiswa');
+    Route::get('wilayah', [SiswaController::class, 'wilayah']);
 });
 
 // Route::get('dashboard', [SiswaController::class, 'index']);

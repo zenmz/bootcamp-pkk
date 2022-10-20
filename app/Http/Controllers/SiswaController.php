@@ -6,6 +6,7 @@ use App\Models\Sekolah;
 use App\Models\Siswa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 
 class SiswaController extends Controller
 {
@@ -143,5 +144,46 @@ class SiswaController extends Controller
         $data = Siswa::findOrFail($id);
         $data->delete();
         return redirect('siswa')->with('success', 'Data Berhasil Dihapus');
+    }
+
+    public function wilayah()
+    {
+        // $data = Http::get('http://www.emsifa.com/api-wilayah-indonesia/api/provinces.json');
+        // dd($data->json());
+
+
+        // Http::post('http://127.0.0.1:8000/api/siswa', [
+        //     'nis' => 5555,
+        //     'nama' => 'zzzz',
+        //     'alamat' => 'zzzz',
+        //     'sekolah_id' => 1
+        // ]);
+
+        // $data = Http::withHeaders([
+        //     'Content-Type' => 'application/json'
+        // ])->post('https://testprepaid.mobilepulsa.net/v1/legacy/index', [
+        //     "commands" => "pricelist",
+        //     "username" => "081553355305",
+        //     "sign" => "f677348026a1bc0a14f4a7d507ac6559",
+        //     "status" => "all"
+        // ]);
+
+
+        $data = Http::withHeaders([
+            'Content-Type' => 'application/json'
+        ])->post('https://testprepaid.mobilepulsa.net/v1/legacy/index', [
+            "commands" => "topup",
+            "username" => "081553355305",
+            "ref_id" => "we12",
+            "hp" => "081553355305",
+            "pulsa_code" => "hindosat10000",
+            "sign" => "284b8afb134565575b3a2e88c9496b12"
+        ]);
+
+        // return $data->json();
+        dd($data->json());
+        // $bersih = $data->json();
+
+        // return $bersih->find(1);
     }
 }
