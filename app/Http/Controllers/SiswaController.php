@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\SiswaExport;
 use App\Models\Sekolah;
 use App\Models\Siswa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Maatwebsite\Excel\Excel;
+
+use function PHPUnit\Framework\returnSelf;
 
 class SiswaController extends Controller
 {
@@ -148,7 +152,8 @@ class SiswaController extends Controller
 
     public function wilayah()
     {
-        // $data = Http::get('http://www.emsifa.com/api-wilayah-indonesia/api/provinces.json');
+        $data = Http::get('http://www.emsifa.com/api-wilayah-indonesia/api/provinces.json');
+        return $data->json();
         // dd($data->json());
 
 
@@ -169,21 +174,47 @@ class SiswaController extends Controller
         // ]);
 
 
-        $data = Http::withHeaders([
-            'Content-Type' => 'application/json'
-        ])->post('https://testprepaid.mobilepulsa.net/v1/legacy/index', [
-            "commands" => "topup",
-            "username" => "081553355305",
-            "ref_id" => "we12",
-            "hp" => "081553355305",
-            "pulsa_code" => "hindosat10000",
-            "sign" => "284b8afb134565575b3a2e88c9496b12"
-        ]);
+        // $data = Http::withHeaders([
+        //     'Content-Type' => 'application/json'
+        // ])->post('https://testprepaid.mobilepulsa.net/v1/legacy/index', [
+        //     "commands" => "topup",
+        //     "username" => "081553355305",
+        //     "ref_id" => "we12",
+        //     "hp" => "081553355305",
+        //     "pulsa_code" => "hindosat10000",
+        //     "sign" => "284b8afb134565575b3a2e88c9496b12"
+        // ]);
 
         // return $data->json();
-        dd($data->json());
+        // dd($data->json());
         // $bersih = $data->json();
+        // $aa = json_decode($data);
+        // dd($bersih);
+        // return $bersih->where('data->status', 1)->get();
+        // return "<script> console.log($aa)</script>";
+        // return response($bersih);
 
-        // return $bersih->find(1);
+        // return collect($bersih['data'])->unique('pulsa_op');
+        // return collect($bersih)->where('name', 'KEPULAUAN BANGKA BELITUNG');
+
+        // $data['data'];
+
+        // foreach ($bersih as $key) {
+        //     echo $key['name'];
+        // }
+
+        // echo $data['data']['message'];
+    }
+
+    public function export()
+    {
+        // return Excel::download(new SiswaExport, 'laporan.xlsx');
+        // return (new SiswaExport)->download('invoices.pdf', Excel::MPDF);
+
+        // return (new SiswaExport)->download('invoices.pdf', Excel::MPDF);
+        return (new SiswaExport)->download('invoices.pdf', \Maatwebsite\Excel\Excel::MPDF);
+
+        // return Pdf->download();
+
     }
 }

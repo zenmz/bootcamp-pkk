@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\SiswaController;
+use App\Http\Controllers\UploadController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -28,8 +29,11 @@ Route::get('sekolah', function () {
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::resource('siswa', SiswaController::class);
     Route::get('deletesiswa/{id}', [SiswaController::class, 'destroy'])->name('deletesiswa');
-    Route::get('wilayah', [SiswaController::class, 'wilayah']);
 });
+Route::get('wilayah', [SiswaController::class, 'wilayah']);
+
+Route::get('export', [SiswaController::class, 'export']);
+Route::resource('upload', UploadController::class);
 
 // Route::get('dashboard', [SiswaController::class, 'index']);
 
@@ -39,6 +43,14 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
 Route::get('dashboard', function () {
     return view('dashboard');
+});
+
+Route::get('json', function () {
+    return view('json');
+});
+
+Route::get('ajax', function () {
+    return view('ajax');
 });
 
 // Route::get('table', function () {

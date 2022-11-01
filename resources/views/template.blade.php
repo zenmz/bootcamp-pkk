@@ -112,6 +112,7 @@
 
     <!-- Page level custom scripts -->
     <script src="{{ asset('sb/js/demo/datatables-demo.js') }}"></script>
+    <script src="{{ asset('js/app.js') }}"></script>
 
     @yield('js')
 

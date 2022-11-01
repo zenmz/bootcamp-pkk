@@ -23,6 +23,11 @@ class SiswaController extends Controller
         ];
 
         return response($respon, 200);
+
+        return response([
+            'response' => 'sukses',
+            'data' => $data
+        ], 200);
     }
 
     /**
@@ -84,7 +89,7 @@ class SiswaController extends Controller
 
             $stcode = 400;
         }
-        
+
         return response($respon, $stcode);
     }
 
