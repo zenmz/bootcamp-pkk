@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Upload;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+
+use function GuzzleHttp\Promise\all;
 
 class UploadController extends Controller
 {
@@ -37,16 +40,27 @@ class UploadController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = $request->validate([
-            'image' => 'required|image|max:10000|mimes:jpg',
-        ]);
+        // $validator = $request->validate([
+        //     'image' => 'required|image|max:10000|mimes:jpg',
+        // ]);
 
-        $file = $request->file('image')->store('img');
+        // $file = $request->file('image')->store('img');
 
-        Upload::create([
-            'image' => $file
-        ]);
+        // $request->image = $request->file('image')->store('img');
 
+
+        // dd($data);
+        // $data['image'] = $request->file('image')->store('img');
+
+        // Upload::create([
+        //     'image' => $file
+        // ]);
+
+        $data = $request->all();
+
+        $data['image'] = Storage::put('img', $request->file('image'), 'pkk01');
+
+        Upload::create($data);
 
         return redirect('upload')->with('success', 'Data Berhasil Ditambah');
     }
@@ -85,6 +99,9 @@ class UploadController extends Controller
     {
         $data = Upload::findOrFail($id);
 
+        // unlink(public_path($data->image));
+        Storage::delete($data->image);
+
         // if ($request->file('image')) {
         //     $file = $request->file('image')->store('img');
 
@@ -99,17 +116,17 @@ class UploadController extends Controller
         //     // return redirect('upload')->with('error', 'Tidak ada yang diubah');
         // }
 
-        try {
-            $file = $request->file('image')->store('img');
+        // try {
+        //     $file = $request->file('image')->store('img');
 
-            $data->update([
-                'image' => $file
-            ]);
-        } catch (\Throwable $th) {
-            $data->update([
-                'image' => $data->image
-            ]);
-        }
+        //     $data->update([
+        //         'image' => $file
+        //     ]);
+        // } catch (\Throwable $th) {
+        //     $data->update([
+        //         'image' => $data->image
+        //     ]);
+        // }
 
         return redirect('upload')->with('success', 'Data Berhasil Diubah');
     }

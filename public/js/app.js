@@ -12,16 +12,15 @@ $.ajax({
     }
 });
 
-const daerah = ()=>{}
 
 function daerah(jenis, id) {
     let dr
 
     if (jenis == 'provinces') {
         dr = 'regencies'
-    }else if (jenis == 'regencies') {
+    } else if (jenis == 'regencies') {
         dr = 'districts'
-    }else if (jenis == 'districts') {
+    } else if (jenis == 'districts') {
         dr = 'villages'
     }
     $.ajax({
@@ -40,3 +39,32 @@ function daerah(jenis, id) {
         }
     });
 }
+
+$('#bayar').click(function (e) {
+    e.preventDefault();
+
+    $.ajax({
+        type: "get",
+        url: "midtrans",
+        data: {
+            id: 'Sy006',
+            harga: 100000,
+            metode: 'bca_va'
+        },
+        dataType: "json",
+        success: function (response) {
+            snap.pay(response, {
+                // Optional
+                onSuccess: function (result) {
+                    console.log(result);
+                },
+                // Optional
+                onPending: function (result) {
+                },
+                // Optional
+                onError: function (result) {
+                }
+            });
+        }
+    });
+});

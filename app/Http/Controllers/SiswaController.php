@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Maatwebsite\Excel\Excel;
+use Midtrans\Config;
+use Midtrans\Snap;
 
 use function PHPUnit\Framework\returnSelf;
 
@@ -216,5 +218,34 @@ class SiswaController extends Controller
 
         // return Pdf->download();
 
+    }
+
+    public function midtrans(Request $request)
+    {
+        $harga = $request->harga;
+        $orderid = $request->id;
+        $metode = $request->metode;
+        // Set your Merchant Server Key
+        Config::$serverKey = 'SB-Mid-server-0o-YZIlbVcurF_KG4uN2pHA2';
+        // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
+        Config::$isProduction = false;
+        // Set sanitization on (default)
+        Config::$isSanitized = true;
+        // Set 3DS transaction for credit card to true
+        Config::$is3ds = true;
+
+        $params = array(
+            'transaction_details' => array(
+                'order_id' => $orderid,
+                'gross_amount' => $harga,
+            ),
+            "enabled_payments" => [
+                $metode
+            ],
+        );
+
+        $snapToken = Snap::getSnapToken($params);
+
+        return json_encode($snapToken);
     }
 }

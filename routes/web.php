@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\RumahController;
 use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\UploadController;
 use Illuminate\Support\Facades\Auth;
@@ -35,7 +36,10 @@ Route::get('wilayah', [SiswaController::class, 'wilayah']);
 Route::get('export', [SiswaController::class, 'export']);
 Route::resource('upload', UploadController::class);
 
+Route::get('midtrans', [SiswaController::class, 'midtrans']);
 // Route::get('dashboard', [SiswaController::class, 'index']);
+
+Route::resource('rumah', RumahController::class);
 
 // Route::get('template', function () {
 //     return view('template');
@@ -51,6 +55,10 @@ Route::get('json', function () {
 
 Route::get('ajax', function () {
     return view('ajax');
+});
+
+Route::get('tamid', function () {
+    return view('midtrans');
 });
 
 // Route::get('table', function () {

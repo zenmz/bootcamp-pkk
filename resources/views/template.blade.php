@@ -114,6 +114,8 @@
     <script src="{{ asset('sb/js/demo/datatables-demo.js') }}"></script>
     <script src="{{ asset('js/app.js') }}"></script>
 
+    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="SB-Mid-client-7Lv_MaaDv1jKLGPr"></script>
+
     @yield('js')
 
 
