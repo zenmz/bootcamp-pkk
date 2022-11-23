@@ -15,7 +15,7 @@ class RumahController extends Controller
      */
     public function index()
     {
-        //
+        return view('formbmi');
     }
 
     /**
@@ -36,7 +36,16 @@ class RumahController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //untuk menghitung bmi
+        $a = new konsul($request->berat, $request->tinggi);
+        // $a->bmi();
+        // $a->obes();
+        $data = [
+            'bmi' => $a->bmi(),
+            'obes' => $a->obes()
+        ];
+
+        return view('formbmi', compact('data'));
     }
 
     /**
@@ -84,5 +93,35 @@ class RumahController extends Controller
     public function destroy(Rumah $rumah)
     {
         //
+    }
+}
+
+class hitung
+{
+    public function __construct($berat, $tinggi)
+    {
+        $this->berat = $berat;
+        $this->tinggi = $tinggi / 100;
+    }
+
+    public function bmi()
+    {
+        return $this->berat / ($this->tinggi * $this->tinggi);
+    }
+}
+
+class konsul extends hitung
+{
+    public function obes()
+    {
+        $dbmi = $this->bmi();
+
+        if ($dbmi < 18) {
+            return 'kurus';
+        } elseif ($dbmi > 30) {
+            return 'obesitas';
+        } else {
+            return 'tidak terdaftar';
+        }
     }
 }
