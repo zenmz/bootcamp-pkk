@@ -42,6 +42,9 @@ Route::middleware(['auth', 'user'])->group(function () {
 });
 
 
+// Route::post('bmi', [RumahController::class, 'bmi']);
+
+
 Route::get('midtrans', [SiswaController::class, 'midtrans']);
 // Route::get('dashboard', [SiswaController::class, 'index']);
 

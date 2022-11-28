@@ -19,16 +19,6 @@ class RumahController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -36,92 +26,108 @@ class RumahController extends Controller
      */
     public function store(Request $request)
     {
-        //untuk menghitung bmi
-        $a = new konsul($request->berat, $request->tinggi);
-        // $a->bmi();
-        // $a->obes();
-        $data = [
-            'bmi' => $a->bmi(),
-            'obes' => $a->obes()
-        ];
+        $nama = $request->nama;
+        $tinggi = $request->tinggi / 100;
+        $berat = $request->berat;
+        $bmi = bmi($berat, $tinggi);
+        $status = status(bmi($berat, $tinggi));
+        $class = new Konsul($request->tahun, $status);
+        $hobi = explode(',', $request->hobi);
 
+        //untuk menghitung bmi
+        // $a = new konsul($request->berat, $request->tinggi);
+
+        $data = [
+            'nama' => $nama,
+            'tinggi' => $tinggi,
+            'berat' => $berat,
+            'bmi' => $bmi,
+            'status' => $status,
+            'hobi' => $hobi[rand(0, count($hobi) - 1)],
+            'umur' => $class->hitungUmur(),
+            'konsul' => $class->StatusKonsul()
+
+        ];
         return view('formbmi', compact('data'));
     }
+}
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Rumah  $rumah
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Rumah $rumah)
-    {
-        $rumah->delete();
-        return view();
-    }
+function bmi($berat, $tinggi)
+{
+    return $berat / ($tinggi * $tinggi);
+}
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Rumah  $rumah
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Rumah $rumah)
-    {
-        // $siswa = Siswa::all();
-        return view('rumah', compact('rumah'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Rumah  $rumah
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Rumah $rumah)
-    {
-        $rumah->update();
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Rumah  $rumah
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Rumah $rumah)
-    {
-        //
+function status($bmi)
+{
+    if ($bmi < 18.5) {
+        return 'Kurus';
+    } elseif ($bmi <= 22.9) {
+        return 'Normal';
+    } elseif ($bmi <= 29.9) {
+        return 'Gemuk';
+    } elseif ($bmi > 30) {
+        return 'Obesitas';
     }
 }
 
-class hitung
+class Umur
 {
-    public function __construct($berat, $tinggi)
+    public function __construct($tahunLahir, $bmi)
     {
-        $this->berat = $berat;
-        $this->tinggi = $tinggi / 100;
+        $this->tahunLahir = $tahunLahir;
+        $this->bmi = $bmi;
     }
 
-    public function bmi()
+    public function hitungUmur()
     {
-        return $this->berat / ($this->tinggi * $this->tinggi);
+        return 2022 - $this->tahunLahir;
     }
 }
 
-class konsul extends hitung
+class Konsul extends Umur
 {
-    public function obes()
+    public function StatusKonsul()
     {
-        $dbmi = $this->bmi();
-
-        if ($dbmi < 18) {
-            return 'kurus';
-        } elseif ($dbmi > 30) {
-            return 'obesitas';
+        if ($this->hitungUmur() >= 17) {
+            $status = 'dewasa';
         } else {
-            return 'tidak terdaftar';
+            $status = 'belum dewasa';
+        }
+
+        if ($status == 'dewasa' && $this->bmi == 'Obesitas') {
+            return 'Anda bisa mendapatkan Konsultasi gratis.';
+        } else {
+            return 'Anda belum bisa mendapatkan Konsultasi gratis.';
         }
     }
 }
+
+// class hitung
+// {
+//     public function __construct($berat, $tinggi)
+//     {
+//         $this->berat = $berat;
+//         $this->tinggi = $tinggi / 100;
+//     }
+
+//     public function bmi()
+//     {
+//         return $this->berat / ($this->tinggi * $this->tinggi);
+//     }
+// }
+
+// class konsul extends hitung
+// {
+//     public function obes()
+//     {
+//         $dbmi = $this->bmi();
+
+//         if ($dbmi < 18) {
+//             return 'kurus';
+//         } elseif ($dbmi > 30) {
+//             return 'obesitas';
+//         } else {
+//             return 'tidak terdaftar';
+//         }
+//     }
+// }
